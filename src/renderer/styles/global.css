@@ -1,0 +1,371 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Global Application Styles — Code Dependency Visualizer
+───────────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── Base ────────────────────────────────────────────────────────────────── */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+  background: var(--color-bg, #0f1117);
+  color: var(--color-text, #e2e8f0);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
+/* ── Light theme overrides ───────────────────────────────────────────────── */
+[data-theme='light'] {
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f0f2f8;
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-text: #1a1d27;
+  --color-text-muted: #64748b;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #3730a3;
+  --color-primary-light: rgba(79, 70, 229, 0.1);
+}
+
+/* ── App Shell Layout ────────────────────────────────────────────────────── */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Title Bar ───────────────────────────────────────────────────────────── */
+.app-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  padding: 0 16px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  -webkit-app-region: drag; /* allow dragging the window */
+  flex-shrink: 0;
+}
+
+.app-titlebar[data-platform='darwin'] {
+  padding-left: 80px; /* macOS traffic lights */
+}
+
+.app-titlebar__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.01em;
+}
+
+.app-titlebar__actions {
+  display: flex;
+  gap: 4px;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  transition: background 120ms ease;
+}
+.titlebar-btn:hover { background: var(--color-surface-hover); }
+
+/* ── App Body ────────────────────────────────────────────────────────────── */
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.sidebar {
+  width: 260px;
+  min-width: 220px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar__header {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar__logo-text {
+  font-size: 15px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-primary), #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sidebar__content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.sidebar__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar__stats-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--color-surface-hover);
+  border-radius: 8px;
+}
+
+.stat-row__label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.sidebar__empty,
+.sidebar__analyzing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.sidebar__empty p,
+.sidebar__analyzing p {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* ── Main Canvas Area ────────────────────────────────────────────────────── */
+.app-main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.canvas--loading,
+.canvas--empty {
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.canvas__loading-text {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.canvas__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 360px;
+  text-align: center;
+  padding: 40px;
+}
+
+.canvas__placeholder h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.canvas__placeholder p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.canvas__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.canvas__root {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.canvas__timestamp {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.canvas__nodes {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Dependency Node Card ─────────────────────────────────────────────────── */
+.dep-node {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+  cursor: default;
+}
+
+.dep-node:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary-light), var(--shadow-md, 0 4px 16px rgba(0,0,0,.5));
+  transform: translateY(-1px);
+}
+
+.dep-node--external { border-left: 3px solid var(--color-info); }
+.dep-node--internal { border-left: 3px solid var(--color-warning); }
+.dep-node--file     { border-left: 3px solid var(--color-primary); }
+
+.dep-node__icon { font-size: 20px; line-height: 1; }
+
+.dep-node__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dep-node__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dep-node__path {
+  font-size: 11px;
+  font-family: var(--font-mono, monospace);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dep-node__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.dep-node__count {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.dep-node__count--out { color: var(--color-primary); background: var(--color-primary-light); }
+.dep-node__count--in  { color: var(--color-text-muted); background: var(--color-surface-hover); }
+
+/* ── Status Bar ──────────────────────────────────────────────────────────── */
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 26px;
+  padding: 0 12px;
+  background: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.status-bar__left,
+.status-bar__right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-bar__item {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.status-bar__item--active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.status-bar__sep {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }

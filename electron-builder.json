@@ -1,0 +1,64 @@
+{
+  "appId": "com.repo.codedependencyvisualizer",
+  "productName": "Code Dependency Visualizer",
+  "copyright": "Copyright © 2026",
+  "asar": true,
+
+  "directories": {
+    "output": "release",
+    "buildResources": "build-resources"
+  },
+
+  "files": [
+    "dist/**/*",
+    "!dist/renderer/index.html.map",
+    "package.json"
+  ],
+
+  "extraResources": [
+    {
+      "from": "build-resources/icons",
+      "to": "icons"
+    }
+  ],
+
+  "win": {
+    "target": [
+      { "target": "nsis", "arch": ["x64", "arm64"] },
+      { "target": "portable", "arch": ["x64"] }
+    ],
+    "icon": "build-resources/icons/icon.ico",
+    "requestedExecutionLevel": "asInvoker",
+    "signAndEditExecutable": false
+  },
+
+  "nsis": {
+    "oneClick": false,
+    "allowDirChange": true,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "Code Dependency Visualizer",
+    "installerIcon": "build-resources/icons/icon.ico",
+    "uninstallerIcon": "build-resources/icons/icon.ico",
+    "deleteAppDataOnUninstall": false
+  },
+
+  "mac": {
+    "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }],
+    "icon": "build-resources/icons/icon.icns",
+    "category": "public.app-category.developer-tools",
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "entitlements": "build-resources/entitlements.mac.plist",
+    "entitlementsInherit": "build-resources/entitlements.mac.plist"
+  },
+
+  "linux": {
+    "target": ["AppImage", "deb"],
+    "icon": "build-resources/icons",
+    "category": "Development"
+  },
+
+  "publish": null
+}
