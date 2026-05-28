@@ -1,41 +1,27 @@
 import type { HTMLAttributes } from 'react';
+import { cn } from '../../lib/utils';
 
-export type SpinnerSize = 'xs' | 'sm' | 'md' | 'lg';
+const sizeMap = {
+  xs: 'h-3 w-3',
+  sm: 'h-4 w-4',
+  md: 'h-5 w-5',
+  lg: 'h-8 w-8',
+};
 
 export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
-  size?: SpinnerSize;
+  size?: keyof typeof sizeMap;
   label?: string;
 }
 
-const sizeMap: Record<SpinnerSize, number> = {
-  xs: 12,
-  sm: 16,
-  md: 24,
-  lg: 36,
-};
-
-export function Spinner({ size = 'md', label = 'Loading…', className = '', ...props }: SpinnerProps) {
-  const px = sizeMap[size];
+export function Spinner({ size = 'md', label = 'Loading…', className, ...props }: SpinnerProps) {
   return (
     <span
       role="status"
       aria-label={label}
-      className={`spinner spinner--${size} ${className}`.trim()}
-      style={{ width: px, height: px }}
+      className={cn('inline-flex items-center justify-center', sizeMap[size], className)}
       {...props}
     >
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeDasharray="31.416"
-          strokeDashoffset="10"
-        />
-      </svg>
+      <span className="h-full w-full animate-spin rounded-full border-2 border-slate-300 border-t-indigo-600" />
       <span className="sr-only">{label}</span>
     </span>
   );

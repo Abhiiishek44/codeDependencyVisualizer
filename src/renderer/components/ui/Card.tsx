@@ -1,24 +1,11 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes } from 'react';
+import { cn } from '../../lib/utils';
 
-export interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  children: ReactNode;
-  glass?: boolean;
-  padding?: 'none' | 'sm' | 'md' | 'lg';
-}
-
-export function Card({ children, glass = false, padding = 'md', className = '', ...props }: CardProps) {
-  const classes = [
-    'card',
-    `card--pad-${padding}`,
-    glass ? 'card--glass' : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
+export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={classes} {...props}>
-      {children}
-    </div>
+    <div
+      className={cn('rounded-2xl border border-slate-200 bg-white p-5 shadow-sm', className)}
+      {...props}
+    />
   );
 }

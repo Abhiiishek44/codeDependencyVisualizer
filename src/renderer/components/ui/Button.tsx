@@ -1,61 +1,34 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ButtonHTMLAttributes } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+const buttonVariants = cva(
+  'inline-flex items-center justify-center gap-2 rounded-xl text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:pointer-events-none disabled:opacity-60',
+  {
+    variants: {
+      variant: {
+        default: 'bg-slate-900 text-white hover:bg-slate-800',
+        outline: 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50',
+        ghost: 'bg-transparent text-slate-600 hover:bg-slate-100',
+      },
+      size: {
+        sm: 'h-9 px-3 text-xs',
+        md: 'h-10 px-4',
+        lg: 'h-11 px-5',
+        icon: 'h-9 w-9',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
+);
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  isLoading?: boolean;
-  leftIcon?: ReactNode;
-  rightIcon?: ReactNode;
-  children: ReactNode;
-}
+export interface ButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {}
 
-const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'btn--sm',
-  md: 'btn--md',
-  lg: 'btn--lg',
-};
-
-const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'btn--primary',
-  secondary: 'btn--secondary',
-  ghost: 'btn--ghost',
-  danger: 'btn--danger',
-};
-
-export function Button({
-  variant = 'primary',
-  size = 'md',
-  isLoading = false,
-  leftIcon,
-  rightIcon,
-  children,
-  disabled,
-  className = '',
-  ...props
-}: ButtonProps) {
-  const classes = ['btn', variantClasses[variant], sizeClasses[size], className]
-    .filter(Boolean)
-    .join(' ');
-
-  return (
-    <button
-      className={classes}
-      disabled={disabled ?? isLoading}
-      aria-busy={isLoading}
-      {...props}
-    >
-      {isLoading ? (
-        <span className="btn__spinner" aria-hidden="true" />
-      ) : (
-        leftIcon && <span className="btn__icon btn__icon--left">{leftIcon}</span>
-      )}
-      <span className="btn__label">{children}</span>
-      {!isLoading && rightIcon && (
-        <span className="btn__icon btn__icon--right">{rightIcon}</span>
-      )}
-    </button>
-  );
+export function Button({ className, variant, size, ...props }: ButtonProps) {
+  return <button className={cn(buttonVariants({ variant, size, className }))} {...props} />;
 }
