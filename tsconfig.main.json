@@ -4,6 +4,8 @@
     "module": "CommonJS",
     "moduleResolution": "Node",
     "target": "ES2022",
+    "ignoreDeprecations": "6.0",
+    "skipLibCheck": true,
     "outDir": "./dist/main",
     "baseUrl": ".",
     "paths": {

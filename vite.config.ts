@@ -36,16 +36,10 @@ export default defineConfig({
   // Prevent Vite from exposing process.env to the renderer — use contextBridge instead
   define: {
     'process.env': {},
-    // expose platform for app-titlebar styling
     'process.platform': JSON.stringify(process.platform),
   },
 
   css: {
     devSourcemap: true,
-  },
-
-  // Workspace packages are TypeScript source — exclude from pre-bundling
-  optimizeDeps: {
-    exclude: ['@repo/types', '@repo/ui', '@repo/utils'],
   },
 });

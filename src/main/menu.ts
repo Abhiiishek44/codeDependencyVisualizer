@@ -1,4 +1,4 @@
-import { Menu, shell, app } from 'electron';
+import { Menu, app } from 'electron';
 import type { BrowserWindow } from 'electron';
 
 export function createMenu(win: BrowserWindow): void {
@@ -6,12 +6,6 @@ export function createMenu(win: BrowserWindow): void {
     {
       label: 'File',
       submenu: [
-        {
-          label: 'Open Project…',
-          accelerator: 'CmdOrCtrl+O',
-          click: () => win.webContents.send('menu:open-project'),
-        },
-        { type: 'separator' },
         { role: 'quit' },
       ],
     },
@@ -45,18 +39,13 @@ export function createMenu(win: BrowserWindow): void {
       label: 'Help',
       submenu: [
         {
-          label: 'GitHub Repository',
-          click: () => void shell.openExternal('https://github.com/Abhiiishek44/codeDependencyVisualizer'),
-        },
-        { type: 'separator' },
-        {
           label: 'About',
           click: () => {
             const { dialog } = require('electron');
             void dialog.showMessageBox(win, {
               type: 'info',
               title: 'About',
-              message: 'Code Dependency Visualizer',
+              message: 'Electron Desktop',
               detail: `Version: ${app.getVersion()}\nElectron: ${process.versions.electron}\nNode: ${process.versions.node}`,
             });
           },
