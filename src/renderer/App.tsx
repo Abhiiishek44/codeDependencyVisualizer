@@ -1,23 +1,39 @@
-import { Sidebar } from './components/Sidebar';
-import { GraphCanvas } from './components/GraphCanvas';
-import { TopHeader } from './components/TopHeader';
-import { RightPanel } from './components/RightPanel';
+import { useEffect, useState } from 'react';
+import type { AppVersionInfo } from '@shared/types';
 
 export function App() {
+  const [versionInfo, setVersionInfo] = useState<AppVersionInfo | null>(null);
+
+  useEffect(() => {
+    void window.electron.getAppVersion().then((response) => {
+      if (response.success) setVersionInfo(response.data);
+    });
+  }, []);
+
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <div className="flex h-screen overflow-hidden">
-        <Sidebar />
-        <div className="flex flex-1 flex-col overflow-hidden">
-          <TopHeader />
-          <main className="flex flex-1 gap-6 overflow-hidden bg-slate-50 px-6 pb-6">
-            <div className="flex min-w-0 flex-1 flex-col">
-              <GraphCanvas />
-            </div>
-            <RightPanel />
-          </main>
-        </div>
+    <main className="app-shell">
+      <div className="app-panel">
+        <p className="eyebrow">Electron starter</p>
+        <h1>Ready to build</h1>
+        <p className="summary">
+          Core Electron, preload, IPC, React, and Vite setup are in place.
+        </p>
+
+        <dl className="metadata">
+          <div>
+            <dt>App</dt>
+            <dd>{versionInfo?.version ?? 'Loading...'}</dd>
+          </div>
+          <div>
+            <dt>Electron</dt>
+            <dd>{versionInfo?.electron ?? 'Loading...'}</dd>
+          </div>
+          <div>
+            <dt>Platform</dt>
+            <dd>{versionInfo ? `${versionInfo.platform} ${versionInfo.arch}` : 'Loading...'}</dd>
+          </div>
+        </dl>
       </div>
-    </div>
+    </main>
   );
 }
