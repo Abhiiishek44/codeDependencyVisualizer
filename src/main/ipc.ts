@@ -1,12 +1,18 @@
-import { ipcMain, app } from 'electron';
+import { BrowserWindow, ipcMain, app, dialog } from 'electron';
 import { IPC_CHANNELS } from '../shared/types';
 import type {
   AppVersionInfo,
   IpcResponse,
+  ProjectScanResult,
 } from '../shared/types';
+import { scanProjectFiles } from './file-scanner';
 
 function ok<T>(id: string, data: T): IpcResponse<T> {
   return { id, success: true, data };
+}
+
+function err(id: string, error: string): IpcResponse<never> {
+  return { id, success: false, error };
 }
 
 function registerAppHandlers(): void {
@@ -27,6 +33,37 @@ function registerAppHandlers(): void {
   });
 }
 
+function registerProjectHandlers(): void {
+  ipcMain.handle(
+    IPC_CHANNELS.PROJECT_SELECT_FOLDER,
+    async (event, id: string): Promise<IpcResponse<ProjectScanResult>> => {
+      try {
+        const window = BrowserWindow.fromWebContents(event.sender);
+        const dialogOptions: Electron.OpenDialogOptions = {
+          title: 'Select project folder',
+          properties: ['openDirectory'],
+        };
+        const result = window
+          ? await dialog.showOpenDialog(window, dialogOptions)
+          : await dialog.showOpenDialog(dialogOptions);
+
+        if (result.canceled || !result.filePaths[0]) {
+          return ok(id, { projectPath: '', files: [] });
+        }
+
+        const projectPath = result.filePaths[0];
+        const files = await scanProjectFiles(projectPath);
+
+        return ok(id, { projectPath, files });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to scan project folder';
+        return err(id, message);
+      }
+    }
+  );
+}
+
 export function registerAllHandlers(): void {
   registerAppHandlers();
+  registerProjectHandlers();
 }
