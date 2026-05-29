@@ -28,10 +28,13 @@ input, button, textarea {
   align-items: center;
   justify-content: center;
   padding: 32px;
+  overflow: auto;
 }
 
 .app-panel {
-  width: min(100%, 560px);
+  width: min(100%, 760px);
+  max-height: calc(100vh - 64px);
+  overflow: auto;
   padding: 32px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
@@ -60,10 +63,99 @@ h1 {
   line-height: 1.6;
 }
 
+.primary-action {
+  height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.error-message {
+  margin: 16px 0 0;
+  color: #fca5a5;
+  font-size: 14px;
+}
+
+.scan-results {
+  margin-top: 28px;
+}
+
+.scan-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.scan-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.scan-header p {
+  margin: 8px 0 0;
+  color: #9ca3af;
+  font-size: 13px;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.scan-header span {
+  min-width: 44px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #374151;
+  color: #dbeafe;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.file-list {
+  max-height: 280px;
+  margin: 16px 0 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+.file-list li {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+.file-list li:last-child {
+  border-bottom: 0;
+}
+
+.empty-state {
+  margin: 16px 0 0;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
 .metadata {
   display: grid;
   gap: 12px;
-  margin: 0;
+  margin: 28px 0 0;
 }
 
 .metadata div {
