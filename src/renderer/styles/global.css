@@ -133,7 +133,7 @@ h1 {
   border-radius: 6px;
 }
 
-.file-list li {
+.file-list > li {
   padding: 10px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   color: #e5e7eb;
@@ -142,8 +142,48 @@ h1 {
   word-break: break-all;
 }
 
-.file-list li:last-child {
+.file-list > li:last-child {
   border-bottom: 0;
+}
+
+.file-path {
+  color: #f9fafb;
+  font-weight: 700;
+}
+
+.import-list {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.import-list li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  color: #d1d5db;
+  font-size: 12px;
+}
+
+.import-details {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.import-list em {
+  flex: 0 0 auto;
+  color: #93c5fd;
+  font-style: normal;
+}
+
+.no-imports {
+  margin: 8px 0 0;
+  color: #9ca3af;
+  font-size: 12px;
 }
 
 .empty-state {

@@ -3,6 +3,7 @@ import { IPC_CHANNELS } from '../shared/types';
 import type {
   AppVersionInfo,
   IpcResponse,
+  ProjectImportAnalysisResult,
   ProjectScanResult,
 } from '../shared/types';
 import { generateId as generateIpcId } from '../shared/utils';
@@ -33,6 +34,21 @@ const electronAPI = {
       IPC_CHANNELS.PROJECT_SELECT_FOLDER,
       id
     ) as IpcResponse<ProjectScanResult>;
+
+    if (!response.success) {
+      throw new Error(response.error);
+    }
+
+    return response.data;
+  },
+
+  async analyzeProjectImports(): Promise<ProjectImportAnalysisResult> {
+    const id = generateIpcId();
+    assertAllowedInvoke(IPC_CHANNELS.PROJECT_ANALYZE_IMPORTS);
+    const response = await ipcRenderer.invoke(
+      IPC_CHANNELS.PROJECT_ANALYZE_IMPORTS,
+      id
+    ) as IpcResponse<ProjectImportAnalysisResult>;
 
     if (!response.success) {
       throw new Error(response.error);
